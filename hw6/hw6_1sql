@@ -1,0 +1,18 @@
+/*
+ Пусть задан некоторый пользователь.
+ Из всех друзей этого пользователя найдите человека, 
+ который больше всех общался с нашим пользователем.
+*/
+
+use vk;
+
+select *
+FROM users
+WHERE id IN ( -- 1,2,3 union 4,5,6 -- это мы уже делали сегодня раньше (получали подтвержденных друзей пользователя)
+	  SELECT initiator_user_id FROM friend_requests WHERE (target_user_id = 1) AND status='approved' -- ИД друзей, заявку которых я подтвердил
+	  union
+	  SELECT target_user_id FROM friend_requests WHERE (initiator_user_id = 1) AND status='approved' -- ИД друзей, подрвердивших мою заявку
+  );
+ order by (
+ select count(*)
+ )
